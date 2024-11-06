@@ -105,14 +105,23 @@ public class VehicleManager {
         }
     }
 
-    private void performAnalysis() {
-        System.out.println("\nAnalysis Options:");
-        System.out.println("1. Find vehicle with the lowest mileage");
+    public void performAnalysis() {
+        System.out.println("\nChoose an analysis option:");
+        System.out.println("1. Find vehicle with lowest mileage");
         System.out.println("2. Count vehicles manufactured after 2020");
         System.out.println("3. Calculate average price of all vehicles");
-        System.out.println("4. Find vehicle with the highest price");
+        System.out.println("4. Find vehicle with highest price");
         System.out.println("5. Display vehicles priced below $20,000");
-        System.out.print("Choose an analysis option: ");
+        System.out.println("6. Sort vehicles by year in ascending order");
+        System.out.println("7. Display all vehicles of make 'Toyota'");
+        System.out.println("8. Calculate total mileage of all vehicles");
+        System.out.println("9. Calculate average year of manufacture");
+        System.out.println("10. Display make and model of oldest vehicle");
+        System.out.println("11. Display vehicles with mileage above 20,000");
+        System.out.println("12. Check if any vehicle is manufactured in 2021");
+        System.out.println("13. Display make and model of vehicles in reverse order");
+        System.out.println("14. Display vehicle(s) with longest mileage");
+        System.out.print("Choose an option: ");
 
         int choice = scanner.nextInt();
         scanner.nextLine();
@@ -123,6 +132,15 @@ public class VehicleManager {
             case 3 -> calculateAveragePrice();
             case 4 -> findHighestPrice();
             case 5 -> displayVehiclesUnder20000();
+            case 6 -> sortVehiclesByYear();
+            case 7 -> displayToyotaVehicles();
+            case 8 -> calculateTotalMileage();
+            case 9 -> calculateAverageYear();
+            case 10 -> displayOldestVehicle();
+            case 11 -> displayVehiclesWithHighMileage();
+            case 12 -> checkVehiclesFrom2021();
+            case 13 -> displayVehiclesInReverseOrder();
+            case 14 -> displayVehiclesWithLongestMileage();
             default -> System.out.println("Invalid choice. Returning to main menu.");
         }
     }
@@ -139,6 +157,66 @@ public class VehicleManager {
             }
         }
         System.out.println("Vehicle with the lowest mileage: " + minMileageVehicle);
+    }
+
+    public void sortVehiclesByYear() {
+        vehicles.sort((v1, v2) -> Integer.compare(v1.year, v2.year));
+        System.out.println("Vehicles sorted by year:");
+        viewVehicles();
+    }
+
+    public void displayToyotaVehicles() {
+        System.out.println("Toyota vehicles:");
+        vehicles.stream()
+                .filter(v -> "Toyota".equalsIgnoreCase(v.make))
+                .forEach(System.out::println);
+    }
+
+    public void calculateTotalMileage() {
+        double totalMileage = vehicles.stream().mapToDouble(v -> v.mileage).sum();
+        System.out.println("Total mileage of all vehicles: " + totalMileage);
+    }
+
+    public void calculateAverageYear() {
+        double averageYear = vehicles.stream().mapToInt(v -> v.year).average().orElse(0);
+        System.out.println("Average year of manufacture: " + averageYear);
+    }
+
+    public void displayOldestVehicle() {
+        Vehicle oldestVehicle = vehicles.stream()
+                .min((v1, v2) -> Integer.compare(v1.year, v2.year))
+                .orElse(null);
+        if (oldestVehicle != null) {
+            System.out.println("Oldest vehicle: " + oldestVehicle.make + " " + oldestVehicle.model);
+        }
+    }
+
+    public void displayVehiclesWithHighMileage() {
+        System.out.println("Vehicles with mileage above 20,000:");
+        vehicles.stream()
+                .filter(v -> v.mileage > 20000)
+                .forEach(System.out::println);
+    }
+
+    public void checkVehiclesFrom2021() {
+        boolean has2021 = vehicles.stream().anyMatch(v -> v.year == 2021);
+        System.out.println(has2021 ? "There is a vehicle manufactured in 2021."
+                : "No vehicles manufactured in 2021.");
+    }
+
+    public void displayVehiclesInReverseOrder() {
+        System.out.println("Vehicles in reverse order:");
+        for (int i = vehicles.size() - 1; i >= 0; i--) {
+            System.out.println(vehicles.get(i));
+        }
+    }
+
+    public void displayVehiclesWithLongestMileage() {
+        double maxMileage = vehicles.stream().mapToDouble(v -> v.mileage).max().orElse(0);
+        System.out.println("Vehicle(s) with the longest mileage:");
+        vehicles.stream()
+                .filter(v -> v.mileage == maxMileage)
+                .forEach(System.out::println);
     }
 
     private void countVehiclesAfter2020() {
