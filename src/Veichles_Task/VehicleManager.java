@@ -1,3 +1,5 @@
+package Veichles_Task;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 

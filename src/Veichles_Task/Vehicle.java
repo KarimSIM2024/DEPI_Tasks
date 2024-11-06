@@ -1,3 +1,5 @@
+package Veichles_Task;
+
 public class Vehicle {
     String make;
     String model;
